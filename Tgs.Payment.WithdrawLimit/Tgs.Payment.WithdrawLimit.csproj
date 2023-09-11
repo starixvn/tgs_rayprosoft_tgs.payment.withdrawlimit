@@ -7,7 +7,7 @@
 	<UserSecretsId>a01b3f48-e59b-4d55-a354-c0cbdb2f3d1e</UserSecretsId>
 	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 	<DockerfileBuildArguments>--build-arg "BuildConfiguration=$(Configuration)"</DockerfileBuildArguments>
-	<DockerfileTag Condition="$(DockerfileTag) == ''">payment/withdraw-limit</DockerfileTag>
+	<DockerfileTag Condition="$(DockerfileTag) == ''">pgtgs/payment-withdraw-limit</DockerfileTag>
   </PropertyGroup>
 
   <ItemGroup>
