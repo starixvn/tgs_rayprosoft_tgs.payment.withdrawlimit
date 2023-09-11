@@ -1,0 +1,73 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34024.191
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tgs.Payment.WithdrawLimit", "Tgs.Payment.WithdrawLimit\Tgs.Payment.WithdrawLimit.csproj", "{FEC252F5-0083-424E-87F2-0F62398B3EAE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payment.WithdrawLimit.Core", "Payment.WithdrawLimit.Core\Payment.WithdrawLimit.Core.csproj", "{F354FA54-7CA0-40A5-BE41-EDFF2E2F37FF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "方案項目", "方案項目", "{4812FE1E-A8D0-48E7-962C-75BD52D709EA}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		nuget.config = nuget.config
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Payment.WithdrawLimit.Core.UnitTests", "Payment.WithdrawLimit.Core.UnitTests\Payment.WithdrawLimit.Core.UnitTests.csproj", "{28CA713B-490E-4AB2-AB00-CD14D663044D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payment.WithdrawLimit.Repositories", "Payment.WithdrawLimit.Repositories\Payment.WithdrawLimit.Repositories.csproj", "{F6FB5F98-A252-4E81-9913-76A20E41A02D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tgs.Payment.WithdrawLimit.Client", "Tgs.Payment.WithdrawLimit.Client\Tgs.Payment.WithdrawLimit.Client.csproj", "{BB0EF5B9-159D-4227-9110-80D2AB4DB456}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Payment.WithdrawLimit.Common", "Payment.WithdrawLimit.Common\Payment.WithdrawLimit.Common.csproj", "{E5C5BE37-02A4-4A4E-A953-B6D6FF3EC7A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tgs.Payment.WithdrawLimit.Client.UnitTests", "Tgs.Payment.WithdrawLimit.Client.UnitTests\Tgs.Payment.WithdrawLimit.Client.UnitTests.csproj", "{FF723800-C87A-4A61-A7AC-10554DB6505E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tgs.Payment.WithdrawLimit.IntegrationTests", "Tgs.Payment.WithdrawLimit.IntegrationTests\Tgs.Payment.WithdrawLimit.IntegrationTests.csproj", "{E44A5E39-9BC7-4FC8-A5D6-73C5E2B72D1C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FEC252F5-0083-424E-87F2-0F62398B3EAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEC252F5-0083-424E-87F2-0F62398B3EAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEC252F5-0083-424E-87F2-0F62398B3EAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEC252F5-0083-424E-87F2-0F62398B3EAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F354FA54-7CA0-40A5-BE41-EDFF2E2F37FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F354FA54-7CA0-40A5-BE41-EDFF2E2F37FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F354FA54-7CA0-40A5-BE41-EDFF2E2F37FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F354FA54-7CA0-40A5-BE41-EDFF2E2F37FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28CA713B-490E-4AB2-AB00-CD14D663044D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28CA713B-490E-4AB2-AB00-CD14D663044D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28CA713B-490E-4AB2-AB00-CD14D663044D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28CA713B-490E-4AB2-AB00-CD14D663044D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6FB5F98-A252-4E81-9913-76A20E41A02D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6FB5F98-A252-4E81-9913-76A20E41A02D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6FB5F98-A252-4E81-9913-76A20E41A02D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6FB5F98-A252-4E81-9913-76A20E41A02D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB0EF5B9-159D-4227-9110-80D2AB4DB456}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB0EF5B9-159D-4227-9110-80D2AB4DB456}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB0EF5B9-159D-4227-9110-80D2AB4DB456}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB0EF5B9-159D-4227-9110-80D2AB4DB456}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5C5BE37-02A4-4A4E-A953-B6D6FF3EC7A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5C5BE37-02A4-4A4E-A953-B6D6FF3EC7A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5C5BE37-02A4-4A4E-A953-B6D6FF3EC7A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5C5BE37-02A4-4A4E-A953-B6D6FF3EC7A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF723800-C87A-4A61-A7AC-10554DB6505E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF723800-C87A-4A61-A7AC-10554DB6505E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF723800-C87A-4A61-A7AC-10554DB6505E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF723800-C87A-4A61-A7AC-10554DB6505E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E44A5E39-9BC7-4FC8-A5D6-73C5E2B72D1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E44A5E39-9BC7-4FC8-A5D6-73C5E2B72D1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E44A5E39-9BC7-4FC8-A5D6-73C5E2B72D1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E44A5E39-9BC7-4FC8-A5D6-73C5E2B72D1C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C601B810-B795-4F1C-BFF7-82746BAFE3F8}
+	EndGlobalSection
+EndGlobal

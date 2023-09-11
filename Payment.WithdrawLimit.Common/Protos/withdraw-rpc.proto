@@ -1,0 +1,17 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Tgs.Payment.WithdrawLimit.Protos";
+
+import "phoenix/protobuf/decimal.proto";
+import "phoenix/protobuf/date.proto";
+
+message WithdrawRequest {
+	phoenix.protobuf.DecimalValue amount = 1;
+	phoenix.protobuf.DateValue date = 2;
+	string player_code = 3;
+}
+
+message WithdrawResponse {
+	phoenix.protobuf.DecimalValue amount = 1;
+	int32 count = 2;
+}
