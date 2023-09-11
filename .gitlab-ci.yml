@@ -22,40 +22,25 @@ build-code:
 unit-test:
   extends: .unit-test-template
   variables:
-    DOTNET_USE_POLLING_FILE_WATCHER: "true"  
+    DOTNET_USE_POLLING_FILE_WATCHER: "true"
 
 push-nuget:
   extends: .push-nuget-template
   script:
-    - push_package "Tgs.Payment.Client"
-    - push_package "PaymentService.Client"
+    - push_package "Tgs.Payment.WithdrawLimit.Client"
   artifacts:
     paths:
-      - Tgs.Payment.Client/bin/$BuildConfiguration/*.nupkg
-      - PaymentService.Client/bin/$BuildConfiguration/*.nupkg
+      - Tgs.Payment.WithdrawLimit.Client/bin/$BuildConfiguration/*.nupkg
 
 push-docker-image:
   extends: .push-docker-image-template
   script:
-    - push_docker "PaymentService/PaymentService.csproj" $ImageName $Tag
-
-push-bankinfo-rebuild-hash-job-image:
-  extends: .push-docker-image-template
-  when: manual
-  script:
-    - push_docker "PlayerBankInfoRebuildHash/PlayerBankInfoRebuildHash.csproj" $RebuildHashImageName $Tag
+    - push_docker "Tgs.Payment.WithdrawLimit/Tgs.Payment.WithdrawLimit.csproj" $ImageName $Tag
 
 push-k8s-template:
   extends: .push-k8s-template
   script:
-    - push_k8s_template "payment-api" $ImageName $Tag
-
-push-bankinfo-rebuild-hash-k8s-template:
-  extends: .push-k8s-template
-  needs:
-    - push-bankinfo-rebuild-hash-job-image
-  script:
-    - push_k8s_template "bankinfo-rebuild-hash" $ImageName $Tag
+    - push_k8s_template "withdraw-limit" $ImageName $Tag
 
 deploy-dev:
   extends: .deploy-template
@@ -73,7 +58,7 @@ deploy-dev:
   only:
     - main
   script:
-    - deploy_k8s $TgsSettingKey "payment-api" $namespace
+    - deploy_k8s $TgsSettingKey "withdraw-limit" $namespace
   when: on_success
 
 deploy-staging:
@@ -92,7 +77,7 @@ deploy-staging:
     - main
   when: manual
   script:
-    - deploy_k8s $TgsSettingKey "payment-api" $namespace
+    - deploy_k8s $TgsSettingKey "withdraw-limit" $namespace
 
 deploy-prod:
   extends: .deploy-template
@@ -110,4 +95,4 @@ deploy-prod:
     - main
   when: manual
   script:
-    - deploy_k8s $TgsSettingKey "payment-api" $namespace
+    - deploy_k8s $TgsSettingKey "withdraw-limit" $namespace
