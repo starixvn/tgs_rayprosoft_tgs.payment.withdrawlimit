@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <RootNamespace>Tgs.Payment.WithdrawLimit.Clients</RootNamespace>
     <PackageId>Tgs.Payment.WithdrawLimit.Client</PackageId>
-    <Version>0.0.1</Version>
+    <Version>0.0.2</Version>
     <Authors>Raypro</Authors>
     <Product>Tgs.Payment.WithdrawLimit.Client</Product>
     <PackageProjectUrl>https://gitlab.com/rayprosoft/tgs.payment.withdrawlimit</PackageProjectUrl>

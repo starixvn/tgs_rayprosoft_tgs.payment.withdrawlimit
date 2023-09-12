@@ -4,7 +4,7 @@ using Valhalla.MessageQueue;
 
 namespace Tgs.Payment.WithdrawLimit.Clients;
 
-internal class WithdrawLimitClient
+internal class WithdrawLimitClient : IWithdrawLimitClient
 {
 	private readonly IMessageSender _messageSender;
 
