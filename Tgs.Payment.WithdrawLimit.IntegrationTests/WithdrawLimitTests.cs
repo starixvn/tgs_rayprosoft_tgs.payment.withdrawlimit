@@ -1,14 +1,25 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Tgs.Payment.Clients;
 using Tgs.Payment.WithdrawLimit.Clients;
 using Tgs.Payment.WithdrawLimit.MessageQueue;
 using Valhalla.MessageQueue.Configuration;
+using Xunit.Abstractions;
+using Microsoft.Extensions.Logging;
+using Tgs.BrandCertificate.Clients;
 
 namespace Tgs.Payment.WithdrawLimit.IntegrationTests;
 
 public class WithdrawLimitTests
 {
+    private readonly ITestOutputHelper _testOutputHelper;
+
+    public WithdrawLimitTests(ITestOutputHelper testOutputHelper)
+    {
+        _testOutputHelper = testOutputHelper ?? throw new ArgumentNullException(nameof(testOutputHelper));
+    }
+
     [Fact]
     public async Task 累加提款統計()
     {
@@ -109,12 +120,15 @@ public class WithdrawLimitTests
         // Arrange
         var fakeWithdrawLimitRepository = Substitute.For<IWithdrawLimitRepository>();
         var fakePaymentServiceClient = Substitute.For<IPaymentServiceClient>();
+        var fakeBrandServiceClient = Substitute.For<IBrandServiceClient>();
 
         await using var web = WithdrawLimitServiceTestHost.Instance
             .WithWebHostBuilder(hostBuilder => hostBuilder
+                .ConfigureLogging(logging => logging.AddXUnit(_testOutputHelper))
                 .ConfigureServices(services => services
                     .AddSingleton(fakeWithdrawLimitRepository)
                     .AddSingleton(fakePaymentServiceClient)
+                    .AddSingleton(fakeBrandServiceClient)
                     .AddPaymentClient()
                     .AddPhoenixToolkitsMessageQueue()
                     .AddDirectMessageQueue(config => config
@@ -136,6 +150,12 @@ public class WithdrawLimitTests
         var formId = Guid.NewGuid();
         var brandId = Guid.NewGuid();
         var createdOn = DateTimeOffset.UtcNow;
+
+        _ = fakeBrandServiceClient.GetBrandInfoAsync(Arg.Is(brandId), Arg.Any<CancellationToken>())
+            .Returns(new BrandInfo
+            {
+                Id = brandId
+            });
 
         _ = fakePaymentServiceClient.GetWithdrawFormAsync(Arg.Is(formId), Arg.Any<CancellationToken>())
             .Returns(new WithdrawFormInfo
@@ -177,12 +197,14 @@ public class WithdrawLimitTests
         // Arrange
         var fakeWithdrawLimitRepository = Substitute.For<IWithdrawLimitRepository>();
         var fakePaymentServiceClient = Substitute.For<IPaymentServiceClient>();
+        var fakeBrandServiceClient = Substitute.For<IBrandServiceClient>();
 
         await using var web = WithdrawLimitServiceTestHost.Instance
             .WithWebHostBuilder(hostBuilder => hostBuilder
                 .ConfigureServices(services => services
                     .AddSingleton(fakeWithdrawLimitRepository)
                     .AddSingleton(fakePaymentServiceClient)
+                    .AddSingleton(fakeBrandServiceClient)
                     .AddPaymentClient()
                     .AddPhoenixToolkitsMessageQueue()
                     .AddDirectMessageQueue(config => config
@@ -204,6 +226,12 @@ public class WithdrawLimitTests
         var formId = Guid.NewGuid();
         var brandId = Guid.NewGuid();
         var createdOn = DateTimeOffset.UtcNow;
+
+        _ = fakeBrandServiceClient.GetBrandInfoAsync(Arg.Is(brandId), Arg.Any<CancellationToken>())
+            .Returns(new BrandInfo
+            {
+                Id = brandId
+            });
 
         _ = fakePaymentServiceClient.GetWithdrawFormAsync(Arg.Is(formId), Arg.Any<CancellationToken>())
             .Returns(new WithdrawFormInfo

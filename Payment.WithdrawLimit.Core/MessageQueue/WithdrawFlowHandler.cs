@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf;
+using Tgs.BrandCertificate.Clients;
 using Tgs.Payment.Clients;
 using Tgs.Payment.Protos;
 using Valhalla.MessageQueue;
@@ -9,15 +10,18 @@ internal class WithdrawFlowHandler : IMessageHandler
 {
 	private readonly IPaymentServiceClient _paymentServiceClient;
 	private readonly IWithdrawLimitRepository _withdrawLimitRepository;
+	private readonly IBrandServiceClient _brandServiceClient;
 	private readonly IMessageSender _messageSender;
 
 	public WithdrawFlowHandler(
 		IPaymentServiceClient paymentServiceClient,
 		IWithdrawLimitRepository withdrawLimitRepository,
+		IBrandServiceClient brandServiceClient,
 		IMessageSender messageSender)
 	{
 		_paymentServiceClient = paymentServiceClient ?? throw new ArgumentNullException(nameof(paymentServiceClient));
 		_withdrawLimitRepository = withdrawLimitRepository ?? throw new ArgumentNullException(nameof(withdrawLimitRepository));
+		_brandServiceClient = brandServiceClient ?? throw new ArgumentNullException(nameof(brandServiceClient));
 		_messageSender = messageSender ?? throw new ArgumentNullException(nameof(messageSender));
 	}
 
@@ -35,8 +39,13 @@ internal class WithdrawFlowHandler : IMessageHandler
 		if (form.UserType != UserType.Player)
 			return;
 
+		var brandInfo = await _brandServiceClient.GetBrandInfoAsync(
+			form.BrandId,
+			cancellationToken).ConfigureAwait(false);
+
+		var brandTimeOffset = TimeSpan.FromMinutes(brandInfo!.TimeSpanMinutes ?? 8 * 60);
 		var previousStatus = Enum.Parse<PaymentFlowState>(request.Status);
-		var date = DateOnly.FromDateTime(form.CreatedOn.ToOffset(TimeSpan.FromHours(8D)).DateTime);
+		var date = DateOnly.FromDateTime(form.CreatedOn.ToOffset(brandTimeOffset).DateTime);
 		var playerCode = form.UserId!;
 
 		if (previousStatus == PaymentFlowState.Approved && form.Status == PaymentFlowState.Paid)

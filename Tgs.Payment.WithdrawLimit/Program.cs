@@ -31,7 +31,9 @@ var builder = WebApplication.CreateBuilder(args);
 			sp,
 			builder.Configuration.GetConnectionString("Redis")!))
 		.AddWithdrawLimit()
-		.AddWithdrawLimitRepositories(sp => sp.GetRequiredService<RedisConnectionManager>().Database);
+		.AddWithdrawLimitRepositories(sp => sp.GetRequiredService<RedisConnectionManager>().Database)
+		.AddBrandServiceClient((options, _) => options.BrandCertificateBaseUrl =
+			builder.Configuration.GetValue<Uri>("WithdrawLimit:BrandCertificateBaseUrl")!);
 
 	builder.Services
 		.AddPhoenixToolkitsMessageQueue()

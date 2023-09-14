@@ -1,6 +1,7 @@
 ﻿using ExpectedObjects;
 using Google.Protobuf;
 using NSubstitute;
+using Tgs.BrandCertificate.Clients;
 using Tgs.Payment.Clients;
 using Tgs.Payment.Protos;
 using Tgs.Payment.WithdrawLimit;
@@ -17,11 +18,13 @@ public class WithdrawFlowHandlerTests
         // Arrange
         var fakePaymentServiceClient = Substitute.For<IPaymentServiceClient>();
         var fakeWithdrawLimitRepository = Substitute.For<IWithdrawLimitRepository>();
+        var fakeBrandServiceClient = Substitute.For<IBrandServiceClient>();
         var fakeMessageSender = Substitute.For<IMessageSender>();
 
         var sut = new WithdrawFlowHandler(
             fakePaymentServiceClient,
             fakeWithdrawLimitRepository,
+            fakeBrandServiceClient,
             fakeMessageSender);
 
         var request = new FormEventEx
@@ -30,6 +33,12 @@ public class WithdrawFlowHandlerTests
             FormId = Guid.NewGuid(),
             Status = PaymentFlowState.Approved.ToString()
         };
+
+        _ = fakeBrandServiceClient.GetBrandInfoAsync(Arg.Is(request.BrandId.ToGuid()))
+            .Returns(new BrandInfo
+            {
+                Id = request.BrandId.ToGuid()
+            });
 
         var createdOn = DateTimeOffset.UtcNow;
 
@@ -65,11 +74,13 @@ public class WithdrawFlowHandlerTests
         // Arrange
         var fakePaymentServiceClient = Substitute.For<IPaymentServiceClient>();
         var fakeWithdrawLimitRepository = Substitute.For<IWithdrawLimitRepository>();
+        var fakeBrandServiceClient = Substitute.For<IBrandServiceClient>();
         var fakeMessageSender = Substitute.For<IMessageSender>();
 
         var sut = new WithdrawFlowHandler(
             fakePaymentServiceClient,
             fakeWithdrawLimitRepository,
+            fakeBrandServiceClient,
             fakeMessageSender);
 
         var request = new FormEventEx
@@ -78,6 +89,12 @@ public class WithdrawFlowHandlerTests
             FormId = Guid.NewGuid(),
             Status = PaymentFlowState.Approved.ToString()
         };
+
+        _ = fakeBrandServiceClient.GetBrandInfoAsync(Arg.Is(request.BrandId.ToGuid()))
+            .Returns(new BrandInfo
+            {
+                Id = request.BrandId.ToGuid()
+            });
 
         var createdOn = DateTimeOffset.UtcNow;
 
@@ -113,11 +130,13 @@ public class WithdrawFlowHandlerTests
         // Arrange
         var fakePaymentServiceClient = Substitute.For<IPaymentServiceClient>();
         var fakeWithdrawLimitRepository = Substitute.For<IWithdrawLimitRepository>();
+        var fakeBrandServiceClient = Substitute.For<IBrandServiceClient>();
         var fakeMessageSender = Substitute.For<IMessageSender>();
 
         var sut = new WithdrawFlowHandler(
             fakePaymentServiceClient,
             fakeWithdrawLimitRepository,
+            fakeBrandServiceClient,
             fakeMessageSender);
 
         var request = new FormEventEx
@@ -126,6 +145,12 @@ public class WithdrawFlowHandlerTests
             FormId = Guid.NewGuid(),
             Status = PaymentFlowState.Approved.ToString()
         };
+
+        _ = fakeBrandServiceClient.GetBrandInfoAsync(Arg.Is(request.BrandId.ToGuid()))
+            .Returns(new BrandInfo
+            {
+                Id = request.BrandId.ToGuid()
+            });
 
         var createdOn = DateTimeOffset.UtcNow;
 
@@ -161,11 +186,13 @@ public class WithdrawFlowHandlerTests
         // Arrange
         var fakePaymentServiceClient = Substitute.For<IPaymentServiceClient>();
         var fakeWithdrawLimitRepository = Substitute.For<IWithdrawLimitRepository>();
+        var fakeBrandServiceClient = Substitute.For<IBrandServiceClient>();
         var fakeMessageSender = Substitute.For<IMessageSender>();
 
         var sut = new WithdrawFlowHandler(
             fakePaymentServiceClient,
             fakeWithdrawLimitRepository,
+            fakeBrandServiceClient,
             fakeMessageSender);
 
         var request = new FormEventEx
@@ -174,6 +201,12 @@ public class WithdrawFlowHandlerTests
             FormId = Guid.NewGuid(),
             Status = PaymentFlowState.Approved.ToString()
         };
+
+        _ = fakeBrandServiceClient.GetBrandInfoAsync(Arg.Is(request.BrandId.ToGuid()))
+            .Returns(new BrandInfo
+            {
+                Id = request.BrandId.ToGuid()
+            });
 
         var createdOn = DateTimeOffset.UtcNow;
 
@@ -209,11 +242,13 @@ public class WithdrawFlowHandlerTests
         // Arrange
         var fakePaymentServiceClient = Substitute.For<IPaymentServiceClient>();
         var fakeWithdrawLimitRepository = Substitute.For<IWithdrawLimitRepository>();
+        var fakeBrandServiceClient = Substitute.For<IBrandServiceClient>();
         var fakeMessageSender = Substitute.For<IMessageSender>();
 
         var sut = new WithdrawFlowHandler(
             fakePaymentServiceClient,
             fakeWithdrawLimitRepository,
+            fakeBrandServiceClient,
             fakeMessageSender);
 
         var request = new FormEventEx
@@ -222,6 +257,12 @@ public class WithdrawFlowHandlerTests
             FormId = Guid.NewGuid(),
             Status = PaymentFlowState.WaitApprove.ToString()
         };
+
+        _ = fakeBrandServiceClient.GetBrandInfoAsync(Arg.Is(request.BrandId.ToGuid()))
+            .Returns(new BrandInfo
+            {
+                Id = request.BrandId.ToGuid()
+            });
 
         var createdOn = DateTimeOffset.UtcNow;
 
@@ -283,11 +324,13 @@ public class WithdrawFlowHandlerTests
         // Arrange
         var fakePaymentServiceClient = Substitute.For<IPaymentServiceClient>();
         var fakeWithdrawLimitRepository = Substitute.For<IWithdrawLimitRepository>();
+        var fakeBrandServiceClient = Substitute.For<IBrandServiceClient>();
         var fakeMessageSender = Substitute.For<IMessageSender>();
 
         var sut = new WithdrawFlowHandler(
             fakePaymentServiceClient,
             fakeWithdrawLimitRepository,
+            fakeBrandServiceClient,
             fakeMessageSender);
 
         var request = new FormEventEx
@@ -296,6 +339,12 @@ public class WithdrawFlowHandlerTests
             FormId = Guid.NewGuid(),
             Status = PaymentFlowState.Approved.ToString()
         };
+
+        _ = fakeBrandServiceClient.GetBrandInfoAsync(Arg.Is(request.BrandId.ToGuid()))
+            .Returns(new BrandInfo
+            {
+                Id = request.BrandId.ToGuid()
+            });
 
         var createdOn = DateTimeOffset.UtcNow;
 
@@ -357,11 +406,13 @@ public class WithdrawFlowHandlerTests
         // Arrange
         var fakePaymentServiceClient = Substitute.For<IPaymentServiceClient>();
         var fakeWithdrawLimitRepository = Substitute.For<IWithdrawLimitRepository>();
+        var fakeBrandServiceClient = Substitute.For<IBrandServiceClient>();
         var fakeMessageSender = Substitute.For<IMessageSender>();
 
         var sut = new WithdrawFlowHandler(
             fakePaymentServiceClient,
             fakeWithdrawLimitRepository,
+            fakeBrandServiceClient,
             fakeMessageSender);
 
         var request = new FormEventEx
