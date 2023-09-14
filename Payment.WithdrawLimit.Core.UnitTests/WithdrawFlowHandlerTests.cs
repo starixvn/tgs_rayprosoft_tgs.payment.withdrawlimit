@@ -450,4 +450,62 @@ public class WithdrawFlowHandlerTests
                 Arg.Any<DateOnly>(),
                 Arg.Any<decimal>());
     }
+
+    [Fact]
+    public async Task 提款單處理時_會依照Brand的時區設定來將CreatedOn轉換成該時區日期來計算當日總額()
+    {
+        // Arrange
+        var fakePaymentServiceClient = Substitute.For<IPaymentServiceClient>();
+        var fakeWithdrawLimitRepository = Substitute.For<IWithdrawLimitRepository>();
+        var fakeBrandServiceClient = Substitute.For<IBrandServiceClient>();
+        var fakeMessageSender = Substitute.For<IMessageSender>();
+
+        var sut = new WithdrawFlowHandler(
+            fakePaymentServiceClient,
+            fakeWithdrawLimitRepository,
+            fakeBrandServiceClient,
+            fakeMessageSender);
+
+        var request = new FormEventEx
+        {
+            BrandId = Guid.NewGuid(),
+            FormId = Guid.NewGuid(),
+            Status = PaymentFlowState.Approved.ToString()
+        };
+
+        var timeOffset = 5.5D * 60;
+        _ = fakeBrandServiceClient.GetBrandInfoAsync(Arg.Is(request.BrandId.ToGuid()))
+            .Returns(new BrandInfo
+            {
+                Id = request.BrandId.ToGuid(),
+                TimeSpanMinutes = (int)timeOffset
+            });
+
+        var createdOn = DateTimeOffset.Parse("2022/9/13+8");
+
+        _ = fakePaymentServiceClient.GetWithdrawFormAsync(Arg.Is(request.FormId.ToGuid()))
+            .Returns(new WithdrawFormInfo
+            {
+                Id = request.FormId.ToGuid(),
+                BrandId = request.BrandId.ToGuid(),
+                Amount = 1000M,
+                ActualAmount = 900M,
+                Status = PaymentFlowState.Paid,
+                UserType = UserType.Player,
+                UserId = "test1",
+                CreatedOn = createdOn.UtcDateTime
+            });
+
+        // Act
+        await sut.HandleAsync(request.ToByteArray());
+
+        // Assert
+        _ = fakeWithdrawLimitRepository.Received(1)
+            .DecreaseWithdrawTotalAmountAsync(
+                Arg.Is("test1"),
+                Arg.Is(DateOnly.FromDateTime(createdOn.ToOffset(TimeSpan.FromMinutes(timeOffset)).DateTime)),
+                Arg.Is(100M));
+        _ = fakeWithdrawLimitRepository.Received(0)
+            .DecreaseWithdrawCountAsync(Arg.Is("test1"), Arg.Any<DateOnly>());
+    }
 }
