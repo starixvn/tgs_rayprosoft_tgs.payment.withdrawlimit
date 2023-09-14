@@ -5,6 +5,9 @@ metadata:
 data:
   appsettings.json: |
     {
+      "WithdrawLimit": {
+        "BrandCertificateBaseUrl": "http://brand-cert-api"
+      },
     }
   otel-collector-config.yaml: |
     receivers:
