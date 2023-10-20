@@ -6,7 +6,8 @@ data:
   appsettings.json: |
     {
       "WithdrawLimit": {
-        "BrandCertificateBaseUrl": "http://brand-cert-api"
+        "BrandCertificateBaseUrl": "http://brand-cert-api",
+        "PaymentServiceBaseUrl": "http://payment-api"
       },
     }
   otel-collector-config.yaml: |

@@ -33,7 +33,10 @@ var builder = WebApplication.CreateBuilder(args);
 		.AddWithdrawLimit()
 		.AddWithdrawLimitRepositories(sp => sp.GetRequiredService<RedisConnectionManager>().Database)
 		.AddBrandServiceClient((options, _) => options.BrandCertificateBaseUrl =
-			builder.Configuration.GetValue<Uri>("WithdrawLimit:BrandCertificateBaseUrl")!);
+			builder.Configuration.GetValue<Uri>("WithdrawLimit:BrandCertificateBaseUrl")!)
+		.AddPaymentServiceClient(httpBuilder => httpBuilder
+			.ConfigureHttpClient(http => http.BaseAddress =
+				builder.Configuration.GetValue<Uri>("WithdrawLimit:PaymentServiceBaseUrl")!));
 
 	builder.Services
 		.AddPhoenixToolkitsMessageQueue()
