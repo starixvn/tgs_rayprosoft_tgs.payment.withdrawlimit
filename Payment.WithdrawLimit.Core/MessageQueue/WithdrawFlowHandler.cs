@@ -6,24 +6,16 @@ using Valhalla.MessageQueue;
 
 namespace Tgs.Payment.WithdrawLimit.MessageQueue;
 
-internal class WithdrawFlowHandler : IMessageHandler
+internal class WithdrawFlowHandler(
+	IPaymentServiceClient paymentServiceClient,
+	IWithdrawLimitRepository withdrawLimitRepository,
+	IBrandServiceClient brandServiceClient,
+	IMessageSender messageSender) : IMessageHandler
 {
-	private readonly IPaymentServiceClient _paymentServiceClient;
-	private readonly IWithdrawLimitRepository _withdrawLimitRepository;
-	private readonly IBrandServiceClient _brandServiceClient;
-	private readonly IMessageSender _messageSender;
-
-	public WithdrawFlowHandler(
-		IPaymentServiceClient paymentServiceClient,
-		IWithdrawLimitRepository withdrawLimitRepository,
-		IBrandServiceClient brandServiceClient,
-		IMessageSender messageSender)
-	{
-		_paymentServiceClient = paymentServiceClient ?? throw new ArgumentNullException(nameof(paymentServiceClient));
-		_withdrawLimitRepository = withdrawLimitRepository ?? throw new ArgumentNullException(nameof(withdrawLimitRepository));
-		_brandServiceClient = brandServiceClient ?? throw new ArgumentNullException(nameof(brandServiceClient));
-		_messageSender = messageSender ?? throw new ArgumentNullException(nameof(messageSender));
-	}
+	private readonly IPaymentServiceClient _paymentServiceClient = paymentServiceClient ?? throw new ArgumentNullException(nameof(paymentServiceClient));
+	private readonly IWithdrawLimitRepository _withdrawLimitRepository = withdrawLimitRepository ?? throw new ArgumentNullException(nameof(withdrawLimitRepository));
+	private readonly IBrandServiceClient _brandServiceClient = brandServiceClient ?? throw new ArgumentNullException(nameof(brandServiceClient));
+	private readonly IMessageSender _messageSender = messageSender ?? throw new ArgumentNullException(nameof(messageSender));
 
 	public async ValueTask HandleAsync(ReadOnlyMemory<byte> data, CancellationToken cancellationToken = default)
 	{

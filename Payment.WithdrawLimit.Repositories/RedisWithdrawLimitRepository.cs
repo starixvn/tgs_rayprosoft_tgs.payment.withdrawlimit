@@ -2,16 +2,11 @@
 
 namespace Tgs.Payment.WithdrawLimit.Repositories;
 
-internal class RedisWithdrawLimitRepository : IWithdrawLimitRepository
+internal class RedisWithdrawLimitRepository(IDatabase redisDatabase) : IWithdrawLimitRepository
 {
 	private static readonly RedisKey _Prefix = new("Tgs:Payment:WithdrawLimit");
 
-	private readonly IDatabase _redisDatabase;
-
-	public RedisWithdrawLimitRepository(IDatabase redisDatabase)
-	{
-		_redisDatabase = redisDatabase ?? throw new ArgumentNullException(nameof(redisDatabase));
-	}
+	private readonly IDatabase _redisDatabase = redisDatabase ?? throw new ArgumentNullException(nameof(redisDatabase));
 
 	public async ValueTask<int> DecreaseWithdrawCountAsync(string playerCode, DateOnly date, CancellationToken cancellationToken = default)
 	{

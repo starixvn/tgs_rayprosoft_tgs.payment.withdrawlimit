@@ -6,14 +6,9 @@ using Valhalla.MessageQueue;
 
 namespace Tgs.Payment.WithdrawLimit.MessageQueue;
 
-internal class DecreaseWithdrawProcessor : IMessageProcessor
+internal class DecreaseWithdrawProcessor(IGetService<DecreaseWithdrawCommand, WithdrawStatistics> decreaseService) : IMessageProcessor
 {
-	private readonly IGetService<DecreaseWithdrawCommand, WithdrawStatistics> _decreaseService;
-
-	public DecreaseWithdrawProcessor(IGetService<DecreaseWithdrawCommand, WithdrawStatistics> decreaseService)
-	{
-		_decreaseService = decreaseService ?? throw new ArgumentNullException(nameof(decreaseService));
-	}
+	private readonly IGetService<DecreaseWithdrawCommand, WithdrawStatistics> _decreaseService = decreaseService ?? throw new ArgumentNullException(nameof(decreaseService));
 
 	public async ValueTask<ReadOnlyMemory<byte>> HandleAsync(ReadOnlyMemory<byte> data, CancellationToken cancellationToken = default)
 	{

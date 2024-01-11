@@ -1,16 +1,10 @@
 ﻿using Tgs.ServiceUtility;
-using Tgs.Payment.WithdrawLimit;
 
 namespace Tgs.Payment.WithdrawLimit.ApplicationServices;
 
-internal class DecreaseWithdrawCommandService : IGetService<DecreaseWithdrawCommand, WithdrawStatistics>
+internal class DecreaseWithdrawCommandService(IWithdrawLimitRepository withdrawLimitRepository) : IGetService<DecreaseWithdrawCommand, WithdrawStatistics>
 {
-	private readonly IWithdrawLimitRepository _withdrawLimitRepository;
-
-	public DecreaseWithdrawCommandService(IWithdrawLimitRepository withdrawLimitRepository)
-	{
-		_withdrawLimitRepository = withdrawLimitRepository ?? throw new ArgumentNullException(nameof(withdrawLimitRepository));
-	}
+	private readonly IWithdrawLimitRepository _withdrawLimitRepository = withdrawLimitRepository ?? throw new ArgumentNullException(nameof(withdrawLimitRepository));
 
 	public async ValueTask<WithdrawStatistics> GetAsync(DecreaseWithdrawCommand command, CancellationToken cancellationToken = default)
 	{

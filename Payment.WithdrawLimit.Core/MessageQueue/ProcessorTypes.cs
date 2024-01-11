@@ -2,7 +2,7 @@
 
 public static class ProcessorTypes
 {
-	public readonly static Type IncreaseWithdrawProcessorType = typeof(IncreaseWithdrawProcessor);
-	public readonly static Type DecreaseWithdrawProcessorType = typeof(DecreaseWithdrawProcessor);
-	public readonly static Type WithdrawFlowHandlerType = typeof(WithdrawFlowHandler);
+	public static readonly Type IncreaseWithdrawProcessorType = typeof(IncreaseWithdrawProcessor);
+	public static readonly Type DecreaseWithdrawProcessorType = typeof(DecreaseWithdrawProcessor);
+	public static readonly Type WithdrawFlowHandlerType = typeof(WithdrawFlowHandler);
 }

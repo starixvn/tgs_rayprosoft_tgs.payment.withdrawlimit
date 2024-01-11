@@ -1,7 +1,6 @@
 ﻿using FluentdForward.OpenTelemetry.MessagePack;
 using Microsoft.Extensions.Options;
 using OpenTelemetry.Exporter;
-using OpenTelemetry.Instrumentation.AspNetCore;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -56,6 +55,7 @@ var builder = WebApplication.CreateBuilder(args);
 				"tgs.withdraw-limit.withdraw-flow"))
 		.AddNatsGlobPatternExchange("*");
 
+	var excludeExtensions = new[] { "html", "ico", "png", "jpg" };
 	builder.Services
 		.AddHealthChecks()
 		.Services
@@ -78,13 +78,13 @@ var builder = WebApplication.CreateBuilder(args);
 				.AddEnvironmentVariableDetector())
 			.AddSource("Tgs.*")
 			.AddSource("TGS.*")
-			.AddAspNetCoreInstrumentation(options => options.Filter = 
+			.AddAspNetCoreInstrumentation(options => options.Filter =
 				httpContext => !httpContext.Request.Path.HasValue
 					|| !httpContext.Request.Path.StartsWithSegments("/swagger")
 					&& !httpContext.Request.Path.StartsWithSegments("/healthz")
 					&& !httpContext.Request.Path.StartsWithSegments("/metrics")
 					&& !httpContext.Request.Path.StartsWithSegments("/profiler/")
-					&& !new[] { "html", "ico", "png", "jpg" }.Any(
+					&& !excludeExtensions.Any(
 						ext => httpContext.Request.Path.Value.EndsWith($".{ext}")))
 			.AddProfileViewExporter()
 			.AddOtlpExporter())
