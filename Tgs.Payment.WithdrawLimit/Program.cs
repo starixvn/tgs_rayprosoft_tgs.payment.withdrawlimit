@@ -78,6 +78,14 @@ var builder = WebApplication.CreateBuilder(args);
 				.AddEnvironmentVariableDetector())
 			.AddSource("Tgs.*")
 			.AddSource("TGS.*")
+			.AddAspNetCoreInstrumentation(options => options.Filter = 
+				httpContext => !httpContext.Request.Path.HasValue
+					|| !httpContext.Request.Path.StartsWithSegments("/swagger")
+					&& !httpContext.Request.Path.StartsWithSegments("/healthz")
+					&& !httpContext.Request.Path.StartsWithSegments("/metrics")
+					&& !httpContext.Request.Path.StartsWithSegments("/profiler/")
+					&& !new[] { "html", "ico", "png", "jpg" }.Any(
+						ext => httpContext.Request.Path.Value.EndsWith($".{ext}")))
 			.AddProfileViewExporter()
 			.AddOtlpExporter())
 		.WithMetrics(meterBuiler => meterBuiler
@@ -87,14 +95,6 @@ var builder = WebApplication.CreateBuilder(args);
 			.AddAspNetCoreInstrumentation()
 			.AddOtlpExporter())
 		.Services
-		.Configure<AspNetCoreInstrumentationOptions>(
-			options => options.Filter = httpContext => !httpContext.Request.Path.HasValue
-				|| !httpContext.Request.Path.StartsWithSegments("/swagger")
-				&& !httpContext.Request.Path.StartsWithSegments("/healthz")
-				&& !httpContext.Request.Path.StartsWithSegments("/metrics")
-				&& !httpContext.Request.Path.StartsWithSegments("/profiler/")
-				&& !new[] { "html", "ico", "png", "jpg" }.Any(
-					ext => httpContext.Request.Path.Value.EndsWith($".{ext}")))
 		.AddProfileViewer();
 }
 

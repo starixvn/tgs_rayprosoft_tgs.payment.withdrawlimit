@@ -33,7 +33,7 @@ public class DecreaseWithdrawCommandServiceTests
     }
 
     [Fact]
-    public void 處理存款累計取消_取消計數發生錯誤不會進行下去()
+    public async Task 處理存款累計取消_取消計數發生錯誤不會進行下去()
     {
         // Arrange
         var fakeWithdrawLimitRepository = Substitute.For<IWithdrawLimitRepository>();
@@ -48,7 +48,7 @@ public class DecreaseWithdrawCommandServiceTests
             .Throws<Exception>();
 
         // Act
-        Assert.ThrowsAsync<Exception>(async () => await sut.GetAsync(command));
+        _ = await Assert.ThrowsAsync<Exception>(async () => await sut.GetAsync(command));
 
         // Assert
         _ = fakeWithdrawLimitRepository.Received(0)
@@ -59,7 +59,7 @@ public class DecreaseWithdrawCommandServiceTests
     }
 
     [Fact]
-    public void 處理存款累計取消_取消累計金額發生錯誤會復原累計次數()
+    public async Task 處理存款累計取消_取消累計金額發生錯誤會復原累計次數()
     {
         // Arrange
         var fakeWithdrawLimitRepository = Substitute.For<IWithdrawLimitRepository>();
@@ -75,7 +75,7 @@ public class DecreaseWithdrawCommandServiceTests
             .Throws<Exception>();
 
         // Act
-        _ = Assert.ThrowsAsync<Exception>(async () => await sut.GetAsync(command));
+        _ = await Assert.ThrowsAsync<Exception>(async () => await sut.GetAsync(command));
 
         // Assert
         _ = fakeWithdrawLimitRepository.Received(1)
