@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <RootNamespace>Tgs.Payment.WithdrawLimit.Clients</RootNamespace>
     <PackageId>Tgs.Payment.WithdrawLimit.Client</PackageId>
-    <Version>0.0.2</Version>
+    <Version>0.1.0</Version>
     <Authors>Raypro</Authors>
     <Product>Tgs.Payment.WithdrawLimit.Client</Product>
     <PackageProjectUrl>https://gitlab.com/rayprosoft/tgs.payment.withdrawlimit</PackageProjectUrl>
@@ -20,7 +20,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="PhoenixToolkits.MessageQueue" Version="1.0.3" />
+    <PackageReference Include="PhoenixToolkits.MessageQueue" Version="2.0.0" />
     <PackageReference Include="PhoenixToolkits.NuGet.BuildTools" Version="0.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

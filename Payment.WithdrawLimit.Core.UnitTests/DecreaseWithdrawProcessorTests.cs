@@ -33,7 +33,7 @@ public class DecreaseWithdrawProcessorTests
             .Returns(new WithdrawStatistics(123M, 3));
 
         // Act
-        var result = await sut.HandleAsync(request.ToByteArray());
+        var result = await sut.HandleAsync("test", request.ToByteArray(), null);
         var response = WithdrawResponse.Parser.ParseFrom(result.Span);
 
         // Assert

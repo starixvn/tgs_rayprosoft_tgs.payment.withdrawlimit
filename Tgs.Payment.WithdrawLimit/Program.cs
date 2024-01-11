@@ -1,5 +1,6 @@
 ﻿using FluentdForward.OpenTelemetry.MessagePack;
 using Microsoft.Extensions.Options;
+using NATS.Client.Core;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -38,9 +39,15 @@ var builder = WebApplication.CreateBuilder(args);
 				builder.Configuration.GetValue<Uri>("WithdrawLimit:PaymentServiceBaseUrl")!));
 
 	builder.Services
-		.AddPhoenixToolkitsMessageQueue()
+		.AddKeyedSingleton(
+			"Nats",
+			(sp, _) => new NatsConnection(NatsOpts.Default with
+			{
+				Url = builder.Configuration.GetConnectionString("Nats")!
+			}))
+		.AddMessageQueue()
 		.AddNatsMessageQueue(natsConfig => natsConfig
-			.ConfigQueueOptions((options, _) => options.Url = builder.Configuration.GetConnectionString("Nats")!)
+			.ConfigureResolveConnection(sp => sp.GetRequiredKeyedService<NatsConnection>("Nats"))
 			.AddProcessor(
 				ProcessorTypes.IncreaseWithdrawProcessorType,
 				"tgs.payment.withdraw-limit.increase",

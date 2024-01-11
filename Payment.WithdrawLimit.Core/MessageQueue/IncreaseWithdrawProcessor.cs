@@ -6,11 +6,14 @@ using Valhalla.MessageQueue;
 
 namespace Tgs.Payment.WithdrawLimit.MessageQueue;
 
-internal class IncreaseWithdrawProcessor(IGetService<IncreaseWithdrawCommand, WithdrawStatistics> increaseService) : IMessageProcessor
+internal class IncreaseWithdrawProcessor(IGetService<IncreaseWithdrawCommand, WithdrawStatistics> increaseService)
+	: IMessageProcessor<ReadOnlyMemory<byte>, ReadOnlyMemory<byte>>
 {
-	private readonly IGetService<IncreaseWithdrawCommand, WithdrawStatistics> _increaseService = increaseService ?? throw new ArgumentNullException(nameof(increaseService));
-
-	public async ValueTask<ReadOnlyMemory<byte>> HandleAsync(ReadOnlyMemory<byte> data, CancellationToken cancellationToken = default)
+	public async ValueTask<ReadOnlyMemory<byte>> HandleAsync(
+		string subject,
+		ReadOnlyMemory<byte> data,
+		IEnumerable<MessageHeaderValue>? headerValues,
+		CancellationToken cancellationToken = default)
 	{
 		var request = WithdrawRequest.Parser.ParseFrom(data.Span);
 
@@ -19,7 +22,7 @@ internal class IncreaseWithdrawProcessor(IGetService<IncreaseWithdrawCommand, Wi
 			request.Date.ToDateOnly()!.Value,
 			request.Amount);
 
-		var result = await _increaseService.GetAsync(
+		var result = await increaseService.GetAsync(
 			command,
 			cancellationToken).ConfigureAwait(false);
 

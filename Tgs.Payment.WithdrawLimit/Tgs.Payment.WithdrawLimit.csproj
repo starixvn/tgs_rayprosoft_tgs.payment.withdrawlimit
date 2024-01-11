@@ -20,9 +20,8 @@
 	<PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.7.0" />
 	<PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.7.0" />
 	<PackageReference Include="OpenTelemetry.Instrumentation.Runtime" Version="1.7.0" />
-	<PackageReference Include="PhoenixToolkits.MessageQueue.Nats" Version="1.0.3" />
+	<PackageReference Include="PhoenixToolkits.MessageQueue.Nats" Version="2.0.1" />
 	<PackageReference Include="ProfileViewer.OpenTelemetry.Exporter" Version="0.3.1" />
-	<PackageReference Include="Tgs.MessageQueue.Compatible" Version="0.0.2" />
   </ItemGroup>
 
   <ItemGroup>

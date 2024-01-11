@@ -56,7 +56,7 @@ public class WithdrawFlowHandlerTests
             });
 
         // Act
-        await sut.HandleAsync(request.ToByteArray());
+        await sut.HandleAsync("test", request.ToByteArray(), null);
 
         // Assert
         _ = fakeWithdrawLimitRepository.Received(1)
@@ -112,7 +112,7 @@ public class WithdrawFlowHandlerTests
             });
 
         // Act
-        await sut.HandleAsync(request.ToByteArray());
+        await sut.HandleAsync("test", request.ToByteArray(), null);
 
         // Assert
         _ = fakeWithdrawLimitRepository.Received(0)
@@ -168,7 +168,7 @@ public class WithdrawFlowHandlerTests
             });
 
         // Act
-        await sut.HandleAsync(request.ToByteArray());
+        await sut.HandleAsync("test", request.ToByteArray(), null);
 
         // Assert
         _ = fakeWithdrawLimitRepository.Received(0)
@@ -224,7 +224,7 @@ public class WithdrawFlowHandlerTests
             });
 
         // Act
-        await sut.HandleAsync(request.ToByteArray());
+        await sut.HandleAsync("test", request.ToByteArray(), null);
 
         // Assert
         _ = fakeWithdrawLimitRepository.Received(0)
@@ -285,7 +285,7 @@ public class WithdrawFlowHandlerTests
             PlayerCode = "test1"
         };
 
-        _ = fakeMessageSender.RequestAsync(
+        _ = fakeMessageSender.RequestAsync<ReadOnlyMemory<byte>, ReadOnlyMemory<byte>>(
             Arg.Is("tgs.payment.withdraw-limit.decrease"),
             Arg.Any<ReadOnlyMemory<byte>>())
             .Returns(callInfo =>
@@ -309,11 +309,11 @@ public class WithdrawFlowHandlerTests
             });
 
         // Act
-        await sut.HandleAsync(request.ToByteArray());
+        await sut.HandleAsync("test", request.ToByteArray(), null);
 
         // Assert
         _ = fakeMessageSender.Received(1)
-            .RequestAsync(
+            .RequestAsync<ReadOnlyMemory<byte>, ReadOnlyMemory<byte>>(
                 Arg.Is("tgs.payment.withdraw-limit.decrease"),
                 Arg.Any<ReadOnlyMemory<byte>>());
     }
@@ -367,7 +367,7 @@ public class WithdrawFlowHandlerTests
             PlayerCode = "test1"
         };
 
-        _ = fakeMessageSender.RequestAsync(
+        _ = fakeMessageSender.RequestAsync<ReadOnlyMemory<byte>, ReadOnlyMemory<byte>>(
             Arg.Is("tgs.payment.withdraw-limit.decrease"),
             Arg.Any<ReadOnlyMemory<byte>>())
             .Returns(callInfo =>
@@ -391,11 +391,11 @@ public class WithdrawFlowHandlerTests
             });
 
         // Act
-        await sut.HandleAsync(request.ToByteArray());
+        await sut.HandleAsync("test", request.ToByteArray(), null);
 
         // Assert
         _ = fakeMessageSender.Received(1)
-            .RequestAsync(
+            .RequestAsync<ReadOnlyMemory<byte>, ReadOnlyMemory<byte>>(
                 Arg.Is("tgs.payment.withdraw-limit.decrease"),
                 Arg.Any<ReadOnlyMemory<byte>>());
     }
@@ -437,7 +437,7 @@ public class WithdrawFlowHandlerTests
             });
 
         // Act
-        await sut.HandleAsync(request.ToByteArray());
+        await sut.HandleAsync("test", request.ToByteArray(), null);
 
         // Assert
         _ = fakeMessageSender.Received(0)
@@ -497,7 +497,7 @@ public class WithdrawFlowHandlerTests
             });
 
         // Act
-        await sut.HandleAsync(request.ToByteArray());
+        await sut.HandleAsync("test", request.ToByteArray(), null);
 
         // Assert
         _ = fakeWithdrawLimitRepository.Received(1)

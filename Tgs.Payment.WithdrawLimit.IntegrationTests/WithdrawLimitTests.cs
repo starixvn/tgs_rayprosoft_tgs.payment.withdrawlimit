@@ -24,7 +24,7 @@ public class WithdrawLimitTests(ITestOutputHelper testOutputHelper)
             .WithWebHostBuilder(hostBuilder => hostBuilder
                 .ConfigureServices(services => services
                     .AddSingleton(fakeWithdrawLimitRepository)
-                    .AddPhoenixToolkitsMessageQueue()
+                    .AddMessageQueue()
                     .AddDirectMessageQueue(config => config
                         .AddProcessor(
                             ProcessorTypes.IncreaseWithdrawProcessorType,
@@ -71,7 +71,7 @@ public class WithdrawLimitTests(ITestOutputHelper testOutputHelper)
             .WithWebHostBuilder(hostBuilder => hostBuilder
                 .ConfigureServices(services => services
                     .AddSingleton(fakeWithdrawLimitRepository)
-                    .AddPhoenixToolkitsMessageQueue()
+                    .AddMessageQueue()
                     .AddDirectMessageQueue(config => config
                         .AddProcessor(
                             ProcessorTypes.IncreaseWithdrawProcessorType,
@@ -125,7 +125,7 @@ public class WithdrawLimitTests(ITestOutputHelper testOutputHelper)
                     .AddSingleton(fakePaymentServiceClient)
                     .AddSingleton(fakeBrandServiceClient)
                     .AddPaymentClient()
-                    .AddPhoenixToolkitsMessageQueue()
+                    .AddMessageQueue()
                     .AddDirectMessageQueue(config => config
                         .AddProcessor(
                             ProcessorTypes.IncreaseWithdrawProcessorType,
@@ -201,7 +201,7 @@ public class WithdrawLimitTests(ITestOutputHelper testOutputHelper)
                     .AddSingleton(fakePaymentServiceClient)
                     .AddSingleton(fakeBrandServiceClient)
                     .AddPaymentClient()
-                    .AddPhoenixToolkitsMessageQueue()
+                    .AddMessageQueue()
                     .AddDirectMessageQueue(config => config
                         .AddProcessor(
                             ProcessorTypes.IncreaseWithdrawProcessorType,
