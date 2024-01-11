@@ -1,24 +1,19 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
+using Tgs.BrandCertificate.Clients;
 using Tgs.Payment.Clients;
 using Tgs.Payment.WithdrawLimit.Clients;
 using Tgs.Payment.WithdrawLimit.MessageQueue;
 using Valhalla.MessageQueue.Configuration;
 using Xunit.Abstractions;
-using Microsoft.Extensions.Logging;
-using Tgs.BrandCertificate.Clients;
 
 namespace Tgs.Payment.WithdrawLimit.IntegrationTests;
 
-public class WithdrawLimitTests
+public class WithdrawLimitTests(ITestOutputHelper testOutputHelper)
 {
-    private readonly ITestOutputHelper _testOutputHelper;
-
-    public WithdrawLimitTests(ITestOutputHelper testOutputHelper)
-    {
-        _testOutputHelper = testOutputHelper ?? throw new ArgumentNullException(nameof(testOutputHelper));
-    }
+    private readonly ITestOutputHelper _testOutputHelper = testOutputHelper ?? throw new ArgumentNullException(nameof(testOutputHelper));
 
     [Fact]
     public async Task 累加提款統計()
@@ -29,7 +24,7 @@ public class WithdrawLimitTests
             .WithWebHostBuilder(hostBuilder => hostBuilder
                 .ConfigureServices(services => services
                     .AddSingleton(fakeWithdrawLimitRepository)
-                    .AddPhoenixToolkitsMessageQueue()
+                    .AddMessageQueue()
                     .AddDirectMessageQueue(config => config
                         .AddProcessor(
                             ProcessorTypes.IncreaseWithdrawProcessorType,
@@ -76,7 +71,7 @@ public class WithdrawLimitTests
             .WithWebHostBuilder(hostBuilder => hostBuilder
                 .ConfigureServices(services => services
                     .AddSingleton(fakeWithdrawLimitRepository)
-                    .AddPhoenixToolkitsMessageQueue()
+                    .AddMessageQueue()
                     .AddDirectMessageQueue(config => config
                         .AddProcessor(
                             ProcessorTypes.IncreaseWithdrawProcessorType,
@@ -130,7 +125,7 @@ public class WithdrawLimitTests
                     .AddSingleton(fakePaymentServiceClient)
                     .AddSingleton(fakeBrandServiceClient)
                     .AddPaymentClient()
-                    .AddPhoenixToolkitsMessageQueue()
+                    .AddMessageQueue()
                     .AddDirectMessageQueue(config => config
                         .AddProcessor(
                             ProcessorTypes.IncreaseWithdrawProcessorType,
@@ -206,7 +201,7 @@ public class WithdrawLimitTests
                     .AddSingleton(fakePaymentServiceClient)
                     .AddSingleton(fakeBrandServiceClient)
                     .AddPaymentClient()
-                    .AddPhoenixToolkitsMessageQueue()
+                    .AddMessageQueue()
                     .AddDirectMessageQueue(config => config
                         .AddProcessor(
                             ProcessorTypes.IncreaseWithdrawProcessorType,

@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFrameworks>net6.0;net8.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>Tgs.Payment.WithdrawLimit.Clients</RootNamespace>
     <PackageId>Tgs.Payment.WithdrawLimit.Client</PackageId>
-    <Version>0.0.2</Version>
+    <Version>0.1.0</Version>
     <Authors>Raypro</Authors>
     <Product>Tgs.Payment.WithdrawLimit.Client</Product>
     <PackageProjectUrl>https://gitlab.com/rayprosoft/tgs.payment.withdrawlimit</PackageProjectUrl>
@@ -15,12 +15,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Protobuf" Version="3.24.3" />
-    <PackageReference Include="Grpc.Tools" Version="2.58.0">
+    <PackageReference Include="Google.Protobuf" Version="3.25.2" />
+    <PackageReference Include="Grpc.Tools" Version="2.60.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="PhoenixToolkits.MessageQueue" Version="1.0.3" />
+    <PackageReference Include="PhoenixToolkits.MessageQueue" Version="2.0.0" />
     <PackageReference Include="PhoenixToolkits.NuGet.BuildTools" Version="0.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

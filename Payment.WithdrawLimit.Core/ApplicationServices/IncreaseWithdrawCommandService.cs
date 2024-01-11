@@ -2,14 +2,9 @@
 
 namespace Tgs.Payment.WithdrawLimit.ApplicationServices;
 
-internal class IncreaseWithdrawCommandService : IGetService<IncreaseWithdrawCommand, WithdrawStatistics>
+internal class IncreaseWithdrawCommandService(IWithdrawLimitRepository withdrawLimitRepository) : IGetService<IncreaseWithdrawCommand, WithdrawStatistics>
 {
-	private readonly IWithdrawLimitRepository _withdrawLimitRepository;
-
-	public IncreaseWithdrawCommandService(IWithdrawLimitRepository withdrawLimitRepository)
-	{
-		_withdrawLimitRepository = withdrawLimitRepository ?? throw new ArgumentNullException(nameof(withdrawLimitRepository));
-	}
+	private readonly IWithdrawLimitRepository _withdrawLimitRepository = withdrawLimitRepository ?? throw new ArgumentNullException(nameof(withdrawLimitRepository));
 
 	public async ValueTask<WithdrawStatistics> GetAsync(IncreaseWithdrawCommand command, CancellationToken cancellationToken = default)
 	{

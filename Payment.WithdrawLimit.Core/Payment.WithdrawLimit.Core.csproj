@@ -1,17 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <RootNamespace>Tgs.Payment.WithdrawLimit</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PhoenixToolkits.MessageQueue" Version="1.0.3" />
-    <PackageReference Include="Tgs.BrandCertificateClient" Version="0.0.27" />
-    <PackageReference Include="Tgs.Payment.Client" Version="0.5.0" />
-    <PackageReference Include="Tgs.PaymentService.Client" Version="0.7.1" />
+    <PackageReference Include="PhoenixToolkits.MessageQueue" Version="2.0.0" />
+    <PackageReference Include="Tgs.BrandCertificateClient" Version="0.0.29" />
+    <PackageReference Include="Tgs.Payment.Client" Version="0.6.1" />
+    <PackageReference Include="Tgs.PaymentService.Client" Version="0.8.0" />
     <PackageReference Include="TGS.ServiceUtility" Version="0.2.0" />
   </ItemGroup>
 

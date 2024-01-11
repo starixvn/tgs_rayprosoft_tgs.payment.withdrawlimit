@@ -1,7 +1,7 @@
 ﻿using FluentdForward.OpenTelemetry.MessagePack;
 using Microsoft.Extensions.Options;
+using NATS.Client.Core;
 using OpenTelemetry.Exporter;
-using OpenTelemetry.Instrumentation.AspNetCore;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -39,9 +39,15 @@ var builder = WebApplication.CreateBuilder(args);
 				builder.Configuration.GetValue<Uri>("WithdrawLimit:PaymentServiceBaseUrl")!));
 
 	builder.Services
-		.AddPhoenixToolkitsMessageQueue()
+		.AddKeyedSingleton(
+			"Nats",
+			(sp, _) => new NatsConnection(NatsOpts.Default with
+			{
+				Url = builder.Configuration.GetConnectionString("Nats")!
+			}))
+		.AddMessageQueue()
 		.AddNatsMessageQueue(natsConfig => natsConfig
-			.ConfigQueueOptions((options, _) => options.Url = builder.Configuration.GetConnectionString("Nats")!)
+			.ConfigureResolveConnection(sp => sp.GetRequiredKeyedService<NatsConnection>("Nats"))
 			.AddProcessor(
 				ProcessorTypes.IncreaseWithdrawProcessorType,
 				"tgs.payment.withdraw-limit.increase",
@@ -56,6 +62,7 @@ var builder = WebApplication.CreateBuilder(args);
 				"tgs.withdraw-limit.withdraw-flow"))
 		.AddNatsGlobPatternExchange("*");
 
+	var excludeExtensions = new[] { "html", "ico", "png", "jpg" };
 	builder.Services
 		.AddHealthChecks()
 		.Services
@@ -78,6 +85,14 @@ var builder = WebApplication.CreateBuilder(args);
 				.AddEnvironmentVariableDetector())
 			.AddSource("Tgs.*")
 			.AddSource("TGS.*")
+			.AddAspNetCoreInstrumentation(options => options.Filter =
+				httpContext => !httpContext.Request.Path.HasValue
+					|| !httpContext.Request.Path.StartsWithSegments("/swagger")
+					&& !httpContext.Request.Path.StartsWithSegments("/healthz")
+					&& !httpContext.Request.Path.StartsWithSegments("/metrics")
+					&& !httpContext.Request.Path.StartsWithSegments("/profiler/")
+					&& !excludeExtensions.Any(
+						ext => httpContext.Request.Path.Value.EndsWith($".{ext}")))
 			.AddProfileViewExporter()
 			.AddOtlpExporter())
 		.WithMetrics(meterBuiler => meterBuiler
@@ -87,14 +102,6 @@ var builder = WebApplication.CreateBuilder(args);
 			.AddAspNetCoreInstrumentation()
 			.AddOtlpExporter())
 		.Services
-		.Configure<AspNetCoreInstrumentationOptions>(
-			options => options.Filter = httpContext => !httpContext.Request.Path.HasValue
-				|| !httpContext.Request.Path.StartsWithSegments("/swagger")
-				&& !httpContext.Request.Path.StartsWithSegments("/healthz")
-				&& !httpContext.Request.Path.StartsWithSegments("/metrics")
-				&& !httpContext.Request.Path.StartsWithSegments("/profiler/")
-				&& !new[] { "html", "ico", "png", "jpg" }.Any(
-					ext => httpContext.Request.Path.Value.EndsWith($".{ext}")))
 		.AddProfileViewer();
 }
 

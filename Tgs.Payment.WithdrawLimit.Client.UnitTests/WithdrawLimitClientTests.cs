@@ -22,7 +22,7 @@ public class WithdrawLimitClientTests
             Count = 5
         };
 
-        _ = fakeMessageSender.RequestAsync(
+        _ = fakeMessageSender.RequestAsync<ReadOnlyMemory<byte>, ReadOnlyMemory<byte>>(
             Arg.Is("tgs.payment.withdraw-limit.increase"),
             Arg.Any<ReadOnlyMemory<byte>>())
             .Returns(expectedResponse.ToByteArray());
@@ -35,7 +35,7 @@ public class WithdrawLimitClientTests
 
         // Assert
         _ = fakeMessageSender.Received(1)
-            .RequestAsync(
+            .RequestAsync<ReadOnlyMemory<byte>, ReadOnlyMemory<byte>>(
                 Arg.Is("tgs.payment.withdraw-limit.increase"),
                 Arg.Any<ReadOnlyMemory<byte>>());
         Assert.Equal(expectedResponse.Amount.ToDecimal()!.Value, actual.TotalAmount);
@@ -56,7 +56,7 @@ public class WithdrawLimitClientTests
             Count = 5
         };
 
-        _ = fakeMessageSender.RequestAsync(
+        _ = fakeMessageSender.RequestAsync<ReadOnlyMemory<byte>, ReadOnlyMemory<byte>>(
             Arg.Is("tgs.payment.withdraw-limit.decrease"),
             Arg.Any<ReadOnlyMemory<byte>>())
             .Returns(expectedResponse.ToByteArray());
@@ -69,7 +69,7 @@ public class WithdrawLimitClientTests
 
         // Assert
         _ = fakeMessageSender.Received(1)
-            .RequestAsync(
+            .RequestAsync<ReadOnlyMemory<byte>, ReadOnlyMemory<byte>>(
                 Arg.Is("tgs.payment.withdraw-limit.decrease"),
                 Arg.Any<ReadOnlyMemory<byte>>());
         Assert.Equal(expectedResponse.Amount.ToDecimal()!.Value, actual.TotalAmount);

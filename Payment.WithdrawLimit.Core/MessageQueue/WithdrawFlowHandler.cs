@@ -6,30 +6,22 @@ using Valhalla.MessageQueue;
 
 namespace Tgs.Payment.WithdrawLimit.MessageQueue;
 
-internal class WithdrawFlowHandler : IMessageHandler
+internal class WithdrawFlowHandler(
+	IPaymentServiceClient paymentServiceClient,
+	IWithdrawLimitRepository withdrawLimitRepository,
+	IBrandServiceClient brandServiceClient,
+	IMessageSender messageSender)
+	: IMessageHandler<ReadOnlyMemory<byte>>
 {
-	private readonly IPaymentServiceClient _paymentServiceClient;
-	private readonly IWithdrawLimitRepository _withdrawLimitRepository;
-	private readonly IBrandServiceClient _brandServiceClient;
-	private readonly IMessageSender _messageSender;
-
-	public WithdrawFlowHandler(
-		IPaymentServiceClient paymentServiceClient,
-		IWithdrawLimitRepository withdrawLimitRepository,
-		IBrandServiceClient brandServiceClient,
-		IMessageSender messageSender)
-	{
-		_paymentServiceClient = paymentServiceClient ?? throw new ArgumentNullException(nameof(paymentServiceClient));
-		_withdrawLimitRepository = withdrawLimitRepository ?? throw new ArgumentNullException(nameof(withdrawLimitRepository));
-		_brandServiceClient = brandServiceClient ?? throw new ArgumentNullException(nameof(brandServiceClient));
-		_messageSender = messageSender ?? throw new ArgumentNullException(nameof(messageSender));
-	}
-
-	public async ValueTask HandleAsync(ReadOnlyMemory<byte> data, CancellationToken cancellationToken = default)
+	public async ValueTask HandleAsync(
+		string subject,
+		ReadOnlyMemory<byte> data,
+		IEnumerable<MessageHeaderValue>? headerValues,
+		CancellationToken cancellationToken = default)
 	{
 		var request = FormEventEx.Parser.ParseFrom(data.Span);
 
-		var form = await _paymentServiceClient.GetWithdrawFormAsync(
+		var form = await paymentServiceClient.GetWithdrawFormAsync(
 			request.FormId,
 			cancellationToken).ConfigureAwait(false);
 
@@ -39,7 +31,7 @@ internal class WithdrawFlowHandler : IMessageHandler
 		if (form.UserType != UserType.Player)
 			return;
 
-		var brandInfo = await _brandServiceClient.GetBrandInfoAsync(
+		var brandInfo = await brandServiceClient.GetBrandInfoAsync(
 			form.BrandId,
 			cancellationToken).ConfigureAwait(false);
 
@@ -53,7 +45,7 @@ internal class WithdrawFlowHandler : IMessageHandler
 			var difference = form.Amount - (form.ActualAmount ?? form.Amount);
 
 			if (difference > 0M)
-				_ = await _withdrawLimitRepository.DecreaseWithdrawTotalAmountAsync(
+				_ = await withdrawLimitRepository.DecreaseWithdrawTotalAmountAsync(
 					playerCode,
 					date,
 					difference,
@@ -70,7 +62,7 @@ internal class WithdrawFlowHandler : IMessageHandler
 				PlayerCode = playerCode
 			};
 
-			_ = await _messageSender.RequestAsync(
+			_ = await messageSender.RequestAsync<ReadOnlyMemory<byte>, ReadOnlyMemory<byte>>(
 				"tgs.payment.withdraw-limit.decrease",
 				decreaseRequest.ToByteArray(),
 				cancellationToken).ConfigureAwait(false);

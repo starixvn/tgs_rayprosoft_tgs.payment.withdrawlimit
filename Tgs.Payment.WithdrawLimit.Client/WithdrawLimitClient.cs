@@ -26,7 +26,7 @@ internal class WithdrawLimitClient : IWithdrawLimitClient
 			Amount = amount
 		};
 
-		var responseData = await _messageSender.RequestAsync(
+		var responseData = await _messageSender.RequestAsync<ReadOnlyMemory<byte>, ReadOnlyMemory<byte>>(
 			"tgs.payment.withdraw-limit.increase",
 			request.ToByteArray(),
 			cancellationToken).ConfigureAwait(false);
@@ -49,7 +49,7 @@ internal class WithdrawLimitClient : IWithdrawLimitClient
 			Amount = amount
 		};
 
-		var responseData = await _messageSender.RequestAsync(
+		var responseData = await _messageSender.RequestAsync<ReadOnlyMemory<byte>, ReadOnlyMemory<byte>>(
 			"tgs.payment.withdraw-limit.decrease",
 			request.ToByteArray(),
 			cancellationToken).ConfigureAwait(false);
