@@ -8,10 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PhoenixToolkits.MessageQueue" Version="2.0.0" />
-    <PackageReference Include="Tgs.BrandCertificateClient" Version="0.0.29" />
-    <PackageReference Include="Tgs.Payment.Client" Version="0.6.1" />
-    <PackageReference Include="Tgs.PaymentService.Client" Version="0.8.0" />
+    <PackageReference Include="PhoenixToolkits.MessageQueue" Version="2.2.0" />
+    <PackageReference Include="Tgs.BrandCertificateClient" Version="0.2.4" />
+    <PackageReference Include="Tgs.Payment.Client" Version="0.6.8" />
+    <PackageReference Include="Tgs.PaymentService.Client" Version="0.8.7" />
     <PackageReference Include="TGS.ServiceUtility" Version="0.2.0" />
   </ItemGroup>
 
