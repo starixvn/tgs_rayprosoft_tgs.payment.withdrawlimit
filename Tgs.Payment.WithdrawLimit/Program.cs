@@ -5,6 +5,7 @@ using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Tgs.MessageQueue.Nats.Serializers;
 using Tgs.Payment.WithdrawLimit.MessageQueue;
 using Tgs.Payment.WithdrawLimit.Models;
 
@@ -43,7 +44,8 @@ var builder = WebApplication.CreateBuilder(args);
 			"Nats",
 			(sp, _) => new NatsConnection(NatsOpts.Default with
 			{
-				Url = builder.Configuration.GetConnectionString("Nats")!
+				Url = builder.Configuration.GetConnectionString("Nats")!,
+				SerializerRegistry = TgsNatsSerializerRegistration.Default
 			}))
 		.AddMessageQueue()
 		.AddNatsMessageQueue(natsConfig => natsConfig
@@ -85,6 +87,7 @@ var builder = WebApplication.CreateBuilder(args);
 				.AddEnvironmentVariableDetector())
 			.AddSource("Tgs.*")
 			.AddSource("TGS.*")
+			.AddSource("Valhalla.*")
 			.AddAspNetCoreInstrumentation(options => options.Filter =
 				httpContext => !httpContext.Request.Path.HasValue
 					|| !httpContext.Request.Path.StartsWithSegments("/swagger")
