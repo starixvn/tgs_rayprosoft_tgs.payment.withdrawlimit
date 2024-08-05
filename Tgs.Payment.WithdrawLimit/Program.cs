@@ -67,20 +67,7 @@ var builder = WebApplication.CreateBuilder(args);
 	var excludeExtensions = new[] { "html", "ico", "png", "jpg" };
 	builder.Services
 		.AddHealthChecks()
-		.Services
-		.AddSingleton<IConfigureOptions<OtlpExporterOptions>>(
-			sp => new ConfigureNamedOptions<OtlpExporterOptions>(
-				Options.DefaultName,
-				exporterOptions =>
-				{
-					var config = sp.GetRequiredService<IConfiguration>();
-					var nodeIp = config.GetValue<string>("NODE_IP");
-
-					if (!string.IsNullOrWhiteSpace(nodeIp))
-						exporterOptions.Endpoint = new Uri($"http://{nodeIp}:4317");
-
-					config.GetSection("Opentelemetry:Tracing").Bind(exporterOptions);
-				}))
+		.Services		
 		.AddOpenTelemetry()
 		.WithTracing(tracingBuilder => tracingBuilder
 			.SetResourceBuilder(ResourceBuilder.CreateDefault()
