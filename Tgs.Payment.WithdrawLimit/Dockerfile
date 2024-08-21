@@ -1,8 +1,7 @@
 FROM hub.lumigame.com/base/dotnet/core/sdk:8.0 AS base
 USER app
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+
 
 FROM hub.lumigame.com/base/dotnet/core/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
@@ -23,6 +22,7 @@ RUN dotnet publish "./Tgs.Payment.WithdrawLimit.csproj" -c $BUILD_CONFIGURATION 
 
 FROM base AS final
 WORKDIR /app
+EXPOSE 5000
 COPY --from=publish /app/publish .
 ENV ASPNETCORE_ENVIRONMENT=Development
 ENTRYPOINT ["dotnet", "Tgs.Payment.WithdrawLimit.dll"]
