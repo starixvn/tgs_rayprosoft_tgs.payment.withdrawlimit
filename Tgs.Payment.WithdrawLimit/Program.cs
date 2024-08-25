@@ -10,6 +10,8 @@ using Tgs.Payment.WithdrawLimit.MessageQueue;
 using Tgs.Payment.WithdrawLimit.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.UseSentry();
 {
 	builder.Configuration.AddJsonFile("appsettings.json",
 		optional: true,
@@ -23,9 +25,9 @@ builder.WebHost.UseUrls($"http://0.0.0.0:{builder.Configuration["HostingPort"]}"
 			options.ParseStateValues = true;
 			options.AddFluentdForwardExporter(fluentOptions =>
 			{
-				var nodeIp = builder.Configuration.GetValue<string>("NODE_IP")!;
+				var nodeIp = builder.Configuration.GetValue<string>("Otel:NodeIp")!;
 				fluentOptions.Host = nodeIp;
-				fluentOptions.Tag = builder.Configuration.GetValue<string>("OTEL_SERVICE_NAME")!;
+				fluentOptions.Tag = builder.Configuration.GetValue<string>("Otel:ServiceName")!;
 				fluentOptions.UseMessagePack(LogRecordFormatterResolver.GetResolverInstanceWithExtendInfo(
 					"MachineName",
 					() => Environment.MachineName));
@@ -74,9 +76,8 @@ builder.WebHost.UseUrls($"http://0.0.0.0:{builder.Configuration["HostingPort"]}"
 		.AddHealthChecks()
 		.Services		
 		.AddOpenTelemetry()
+		.ConfigureResource(_ => _.AddService(builder.Configuration.GetValue<string>("Otel:ServiceName")))
 		.WithTracing(tracingBuilder => tracingBuilder
-			.SetResourceBuilder(ResourceBuilder.CreateDefault()
-				.AddEnvironmentVariableDetector())
 			.AddSource("Tgs.*")
 			.AddSource("TGS.*")
 			.AddSource("Valhalla.*")
@@ -89,7 +90,7 @@ builder.WebHost.UseUrls($"http://0.0.0.0:{builder.Configuration["HostingPort"]}"
 					&& !excludeExtensions.Any(
 						ext => httpContext.Request.Path.Value.EndsWith($".{ext}")))
 			.AddProfileViewExporter()
-			.AddOtlpExporter())
+			.AddOtlpExporter(options => options.Endpoint = builder.Configuration.GetValue<Uri>("Otel:Collector")))
 		.WithMetrics(meterBuiler => meterBuiler
 			.SetResourceBuilder(ResourceBuilder.CreateDefault()
 				.AddEnvironmentVariableDetector())
@@ -105,5 +106,7 @@ var app = builder.Build();
 	app.MapHealthChecks("/healthz");
 	app.MapProfileViewer();
 }
+
+SentrySdk.CaptureMessage($"Started result Payment-WithDrawLimit service at {DateTime.Now.ToString()}");
 
 app.Run();
