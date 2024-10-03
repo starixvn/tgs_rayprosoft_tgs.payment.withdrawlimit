@@ -1,7 +1,5 @@
 ﻿using FluentdForward.OpenTelemetry.MessagePack;
-using Microsoft.Extensions.Options;
 using NATS.Client.Core;
-using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -17,6 +15,9 @@ builder.WebHost.UseSentry();
 		optional: true,
 		reloadOnChange: true
 );
+
+builder.WebHost.UseSentry();
+	
 builder.WebHost.UseUrls($"http://0.0.0.0:{builder.Configuration["HostingPort"]}");
 	builder.Logging
 		.AddOpenTelemetry(options =>
